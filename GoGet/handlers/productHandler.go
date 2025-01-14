@@ -9,9 +9,9 @@ import (
 	"strconv"
 
 	"github.com/go-chi/chi/v5"
-	"github.com/jsdzgzMELI/GoWebGet/structs"
+	"github.com/jsdzgzMELI/GoGet/structs"
 
-	"github.com/jsdzgzMELI/GoWebGet/helper"
+	"github.com/jsdzgzMELI/GoGet/helper"
 )
 
 const (
@@ -24,7 +24,7 @@ type Controller struct {
 }
 
 func ProductHandler(w http.ResponseWriter, r *http.Request) {
-	products, err := helper.LoadProducts("./products.json")
+	products, err := helper.LoadProducts(ProductPath)
 	if err != nil {
 		log.Fatalf("Error loading products: %v", err)
 	}
@@ -48,7 +48,7 @@ func GetById(w http.ResponseWriter, r *http.Request) {
 	if intErr != nil {
 		log.Fatalf("Error converting id: %v to int: %v", id, intErr)
 	}
-	products, err := helper.LoadProducts("./products.json")
+	products, err := helper.LoadProducts(ProductPath)
 	if err != nil {
 		log.Fatalf("Error loading products: %v", err)
 	}
@@ -89,7 +89,7 @@ func PriceHigherThan(w http.ResponseWriter, r *http.Request) {
 	if intErr != nil {
 		log.Fatalf("Error converting price: %v to int: %v", price, intErr)
 	}
-	products, err := helper.LoadProducts("./products.json")
+	products, err := helper.LoadProducts(ProductPath)
 	if err != nil {
 		log.Fatalf("Error loading products: %v", err)
 	}

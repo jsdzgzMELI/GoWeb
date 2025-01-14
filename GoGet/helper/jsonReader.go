@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"os"
 
-	"github.com/jsdzgzMELI/GoWebGet/structs"
+	"github.com/jsdzgzMELI/GoGet/structs"
 )
 
 func LoadProducts(filename string) ([]structs.Product, error) {
