@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
-	"github.com/jsdzgzMELI/GoWebGet/handlers"
+	"github.com/jsdzgzMELI/GoGet/handlers"
 )
 
 func main() {
