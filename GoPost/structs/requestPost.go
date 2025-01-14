@@ -1,7 +1,6 @@
 package structs
 
-type Product struct {
-	ID           int     `json:"id"`
+type RequestPost struct {
 	Name         string  `json:"name"`
 	Quantity     int     `json:"quantity"`
 	Code_value   string  `json:"code_value"`
@@ -9,5 +8,3 @@ type Product struct {
 	Expiration   string  `json:"expiration"`
 	Price        float64 `json:"price"`
 }
-
-var Products []Product
