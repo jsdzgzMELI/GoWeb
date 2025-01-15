@@ -1,4 +1,4 @@
-module github.com/jsdzgzMELI/GoWeb/GoPPD
+module github.com/jsdzgzMELI/GoWeb/GoWebTotal
 
 go 1.23.4
 
