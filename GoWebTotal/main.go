@@ -10,7 +10,7 @@ import (
 	"github.com/jsdzgzMELI/GoWeb/GoWebTotal/internal/service"
 )
 
-const fileName = "products.json"
+const fileName = "./docs/db/products.json"
 
 func main() {
 
