@@ -3,6 +3,7 @@ package handler
 import (
 	"encoding/json"
 	"net/http"
+	"os"
 	"strconv"
 
 	"github.com/go-chi/chi/v5"
@@ -28,7 +29,7 @@ func (ph *ProductHandler) UpdateProductHttp(w http.ResponseWriter, r *http.Reque
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(body)
 	}
-	var request pkg.RequestUpdate
+	var request domain.Product
 	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
 		code := http.StatusBadRequest
 		body := &pkg.Response{Message: "error decoding request", Data: nil}
@@ -38,16 +39,16 @@ func (ph *ProductHandler) UpdateProductHttp(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	pr := &domain.Product{
-		ID:           id,
-		Name:         request.Name,
-		Quantity:     request.Quantity,
-		Code_value:   request.Code_value,
-		Is_published: request.Is_published,
-		Expiration:   request.Expiration,
-		Price:        request.Price,
-	}
-	err = ph.service.UpdateProduct(id, *pr)
+	// pr := &domain.Product{
+	// 	ID:           id,
+	// 	Name:         request.Name,
+	// 	Quantity:     request.Quantity,
+	// 	Code_value:   request.Code_value,
+	// 	Is_published: request.Is_published,
+	// 	Expiration:   request.Expiration,
+	// 	Price:        request.Price,
+	// }
+	err = ph.service.UpdateProduct(id, request)
 	// fmt.Println(service.Products)
 	if err != nil {
 		code := http.StatusBadRequest
@@ -57,8 +58,9 @@ func (ph *ProductHandler) UpdateProductHttp(w http.ResponseWriter, r *http.Reque
 		json.NewEncoder(w).Encode(body)
 		return
 	}
+	pr, _ := ph.service.GetById(id)
 	code := http.StatusOK
-	body := &pkg.Response{Message: "Product updated", Data: pr}
+	body := &pkg.Response{Message: "Product updated", Data: &pr}
 	w.WriteHeader(code)
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(body)
@@ -192,6 +194,15 @@ func (ph *ProductHandler) GetById(w http.ResponseWriter, r *http.Request) {
 
 func (ph *ProductHandler) AddProductHttp(w http.ResponseWriter, r *http.Request) {
 	// fmt.Println(service.Products)
+	apiToken := r.Header.Get("Authorization")
+	if apiToken != os.Getenv("API_TOKEN") {
+		code := http.StatusBadRequest
+		body := &pkg.Response{Message: "Token not found", Data: nil}
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(code)
+		json.NewEncoder(w).Encode(body)
+		return
+	}
 	var request domain.Product
 	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
 		code := http.StatusBadRequest

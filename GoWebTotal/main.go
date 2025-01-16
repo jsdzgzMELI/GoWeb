@@ -2,6 +2,7 @@ package main
 
 import (
 	"net/http"
+	"os"
 
 	"github.com/go-chi/chi/v5"
 	handler "github.com/jsdzgzMELI/GoWeb/GoWebTotal/internal/handler"
@@ -12,6 +13,8 @@ import (
 const fileName = "products.json"
 
 func main() {
+
+	os.Setenv("API_TOKEN", "123456")
 
 	iniRep, err := repository.IniProductRepo(fileName)
 	if err != nil {
