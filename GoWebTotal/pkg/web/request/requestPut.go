@@ -1,6 +1,6 @@
-package pkg
+package requests
 
-type ProductIdless struct {
+type RequestUpdate struct {
 	Name         string  `json:"name"`
 	Quantity     int     `json:"quantity"`
 	Code_value   string  `json:"code_value"`

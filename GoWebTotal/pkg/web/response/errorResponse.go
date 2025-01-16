@@ -1,4 +1,4 @@
-package pkg
+package response
 
 type ErrorResponse struct {
 	Status  int    `json:"status"`

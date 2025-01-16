@@ -9,7 +9,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/jsdzgzMELI/GoWeb/GoWebTotal/internal/domain"
 	"github.com/jsdzgzMELI/GoWeb/GoWebTotal/internal/service"
-	"github.com/jsdzgzMELI/GoWeb/GoWebTotal/pkg"
+	"github.com/jsdzgzMELI/GoWeb/GoWebTotal/pkg/web/response"
 )
 
 type ProductHandler struct {
@@ -24,7 +24,7 @@ func (ph *ProductHandler) UpdateProductHttp(w http.ResponseWriter, r *http.Reque
 	apiToken := r.Header.Get("Authorization")
 	if apiToken != os.Getenv("API_TOKEN") {
 		code := http.StatusBadRequest
-		body := &pkg.ErrorResponse{Status: http.StatusBadRequest, Message: "Token not found"}
+		body := &response.ErrorResponse{Status: http.StatusBadRequest, Message: "Token not found"}
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(code)
 		json.NewEncoder(w).Encode(body)
@@ -33,7 +33,7 @@ func (ph *ProductHandler) UpdateProductHttp(w http.ResponseWriter, r *http.Reque
 	id, err := strconv.Atoi(chi.URLParam(r, "id"))
 	if err != nil {
 		code := http.StatusBadRequest
-		body := &pkg.ErrorResponse{Status: http.StatusBadRequest, Message: "Invalid id"}
+		body := &response.ErrorResponse{Status: http.StatusBadRequest, Message: "Invalid id"}
 		w.WriteHeader(code)
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(body)
@@ -41,7 +41,7 @@ func (ph *ProductHandler) UpdateProductHttp(w http.ResponseWriter, r *http.Reque
 	var request domain.Product
 	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
 		code := http.StatusBadRequest
-		body := &pkg.Response{Message: "error decoding request", Data: nil}
+		body := &response.Response{Message: "error decoding request", Data: nil}
 		w.WriteHeader(code)
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(body)
@@ -61,7 +61,7 @@ func (ph *ProductHandler) UpdateProductHttp(w http.ResponseWriter, r *http.Reque
 	// fmt.Println(service.Products)
 	if err != nil {
 		code := http.StatusBadRequest
-		body := &pkg.ErrorResponse{Status: http.StatusBadRequest, Message: err.Error()}
+		body := &response.ErrorResponse{Status: http.StatusBadRequest, Message: err.Error()}
 		w.WriteHeader(code)
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(body)
@@ -69,7 +69,7 @@ func (ph *ProductHandler) UpdateProductHttp(w http.ResponseWriter, r *http.Reque
 	}
 	pr, _ := ph.service.GetById(id)
 	code := http.StatusOK
-	body := &pkg.Response{Message: "Product updated", Data: &pr}
+	body := &response.Response{Message: "Product updated", Data: &pr}
 	w.WriteHeader(code)
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(body)
@@ -79,7 +79,7 @@ func (ph *ProductHandler) PatchProductHttp(w http.ResponseWriter, r *http.Reques
 	apiToken := r.Header.Get("Authorization")
 	if apiToken != os.Getenv("API_TOKEN") {
 		code := http.StatusBadRequest
-		body := &pkg.ErrorResponse{Status: http.StatusBadRequest, Message: "Token not found"}
+		body := &response.ErrorResponse{Status: http.StatusBadRequest, Message: "Token not found"}
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(code)
 		json.NewEncoder(w).Encode(body)
@@ -88,7 +88,7 @@ func (ph *ProductHandler) PatchProductHttp(w http.ResponseWriter, r *http.Reques
 	id, err := strconv.Atoi(chi.URLParam(r, "id"))
 	if err != nil {
 		code := http.StatusBadRequest
-		body := &pkg.ErrorResponse{Status: http.StatusBadRequest, Message: "error decoding request"}
+		body := &response.ErrorResponse{Status: http.StatusBadRequest, Message: "error decoding request"}
 		w.WriteHeader(code)
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(body)
@@ -99,7 +99,7 @@ func (ph *ProductHandler) PatchProductHttp(w http.ResponseWriter, r *http.Reques
 	// var request pkg.RequestPatch
 	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
 		code := http.StatusBadRequest
-		body := &pkg.ErrorResponse{Status: http.StatusBadRequest, Message: "error decoding request"}
+		body := &response.ErrorResponse{Status: http.StatusBadRequest, Message: "error decoding request"}
 		w.WriteHeader(code)
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(body)
@@ -109,7 +109,7 @@ func (ph *ProductHandler) PatchProductHttp(w http.ResponseWriter, r *http.Reques
 	err = ph.service.PatchProduct(id, request)
 	if err != nil {
 		code := http.StatusBadRequest
-		body := &pkg.ErrorResponse{Status: http.StatusBadRequest, Message: err.Error()}
+		body := &response.ErrorResponse{Status: http.StatusBadRequest, Message: err.Error()}
 		w.WriteHeader(code)
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(body)
@@ -117,7 +117,7 @@ func (ph *ProductHandler) PatchProductHttp(w http.ResponseWriter, r *http.Reques
 	}
 	product, err := ph.service.GetById(id)
 	code := http.StatusOK
-	body := &pkg.Response{Message: "Product patched", Data: &product}
+	body := &response.Response{Message: "Product patched", Data: &product}
 	w.WriteHeader(code)
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(body)
@@ -128,7 +128,7 @@ func (ph *ProductHandler) DeleteProductHttp(w http.ResponseWriter, r *http.Reque
 	apiToken := r.Header.Get("Authorization")
 	if apiToken != os.Getenv("API_TOKEN") {
 		code := http.StatusBadRequest
-		body := &pkg.ErrorResponse{Status: http.StatusBadRequest, Message: "Token not found"}
+		body := &response.ErrorResponse{Status: http.StatusBadRequest, Message: "Token not found"}
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(code)
 		json.NewEncoder(w).Encode(body)
@@ -137,7 +137,7 @@ func (ph *ProductHandler) DeleteProductHttp(w http.ResponseWriter, r *http.Reque
 	id, err := strconv.Atoi(chi.URLParam(r, "id"))
 	if err != nil {
 		code := http.StatusBadRequest
-		body := &pkg.ErrorResponse{Status: http.StatusBadRequest, Message: "Invalid id"}
+		body := &response.ErrorResponse{Status: http.StatusBadRequest, Message: "Invalid id"}
 		w.WriteHeader(code)
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(body)
@@ -148,14 +148,14 @@ func (ph *ProductHandler) DeleteProductHttp(w http.ResponseWriter, r *http.Reque
 	// fmt.Println(service.Products)
 	if err != nil {
 		code := http.StatusNotFound
-		body := &pkg.ErrorResponse{Status: http.StatusBadRequest, Message: "Product not found"}
+		body := &response.ErrorResponse{Status: http.StatusBadRequest, Message: "Product not found"}
 		w.WriteHeader(code)
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(body)
 		return
 	}
 	code := http.StatusOK
-	body := &pkg.Response{Message: "Product deleted", Data: nil}
+	body := &response.Response{Message: "Product deleted", Data: nil}
 	w.WriteHeader(code)
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(body)
@@ -165,14 +165,14 @@ func (ph *ProductHandler) GetProductsHttp(w http.ResponseWriter, r *http.Request
 	products, err := ph.service.GetAllProducts()
 	if err != nil {
 		code := http.StatusExpectationFailed
-		body := &pkg.ErrorResponse{Status: http.StatusBadRequest, Message: "No products found"}
+		body := &response.ErrorResponse{Status: http.StatusBadRequest, Message: "No products found"}
 		w.WriteHeader(code)
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(body)
 		return
 	}
 	code := http.StatusOK
-	body := &pkg.ResponseGet{Message: "Products", Data: &products}
+	body := &response.ResponseGet{Message: "Products", Data: &products}
 	w.WriteHeader(code)
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(body)
@@ -183,7 +183,7 @@ func (ph *ProductHandler) AddProductHttp(w http.ResponseWriter, r *http.Request)
 	apiToken := r.Header.Get("Authorization")
 	if apiToken != os.Getenv("API_TOKEN") {
 		code := http.StatusBadRequest
-		body := &pkg.ErrorResponse{Status: http.StatusBadRequest, Message: "Token not found"}
+		body := &response.ErrorResponse{Status: http.StatusBadRequest, Message: "Token not found"}
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(code)
 		json.NewEncoder(w).Encode(body)
@@ -192,7 +192,7 @@ func (ph *ProductHandler) AddProductHttp(w http.ResponseWriter, r *http.Request)
 	var request domain.Product
 	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
 		code := http.StatusBadRequest
-		body := &pkg.ErrorResponse{Status: http.StatusBadRequest, Message: "Error decoding request"}
+		body := &response.ErrorResponse{Status: http.StatusBadRequest, Message: "Error decoding request"}
 		w.WriteHeader(code)
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(body)
@@ -203,7 +203,7 @@ func (ph *ProductHandler) AddProductHttp(w http.ResponseWriter, r *http.Request)
 
 	if err != nil {
 		code := http.StatusBadRequest
-		body := &pkg.ErrorResponse{Status: http.StatusBadRequest, Message: err.Error()}
+		body := &response.ErrorResponse{Status: http.StatusBadRequest, Message: err.Error()}
 		w.WriteHeader(code)
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(body)
@@ -211,7 +211,7 @@ func (ph *ProductHandler) AddProductHttp(w http.ResponseWriter, r *http.Request)
 	}
 
 	code := http.StatusCreated
-	body := &pkg.Response{Message: "Product added", Data: &request}
+	body := &response.Response{Message: "Product added", Data: &request}
 	w.WriteHeader(code)
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(body)
@@ -223,7 +223,7 @@ func (ph *ProductHandler) GetById(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 	if id == "" || id == "0" {
 		code := http.StatusBadRequest
-		body := &pkg.ErrorResponse{Status: http.StatusBadRequest, Message: "id is required and can't be 0"}
+		body := &response.ErrorResponse{Status: http.StatusBadRequest, Message: "id is required and can't be 0"}
 		w.WriteHeader(code)
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(body)
@@ -232,7 +232,7 @@ func (ph *ProductHandler) GetById(w http.ResponseWriter, r *http.Request) {
 	intID, err := strconv.Atoi(id)
 	if err != nil {
 		code := http.StatusBadRequest
-		body := &pkg.ErrorResponse{Status: http.StatusBadRequest, Message: "Invalid id parsing"}
+		body := &response.ErrorResponse{Status: http.StatusBadRequest, Message: "Invalid id parsing"}
 		w.WriteHeader(code)
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(body)
@@ -241,7 +241,7 @@ func (ph *ProductHandler) GetById(w http.ResponseWriter, r *http.Request) {
 	product, err := ph.service.GetById(intID)
 	if err != nil {
 		code := http.StatusNotFound
-		body := &pkg.ErrorResponse{Status: http.StatusBadRequest, Message: "Product not found"}
+		body := &response.ErrorResponse{Status: http.StatusBadRequest, Message: "Product not found"}
 		w.WriteHeader(code)
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(body)
@@ -249,7 +249,7 @@ func (ph *ProductHandler) GetById(w http.ResponseWriter, r *http.Request) {
 	}
 	code := http.StatusOK
 
-	body := &pkg.Response{Message: "Product found", Data: &product}
+	body := &response.Response{Message: "Product found", Data: &product}
 
 	w.WriteHeader(code)
 	w.Header().Set("Content-Type", "application/json")

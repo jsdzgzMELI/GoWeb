@@ -24,6 +24,7 @@ type productRepository struct {
 }
 
 func IniProductRepo(filename string) (ProductRepo, error) {
+	// PORQUE ES UNA DIRECCION DE MEMORIA?
 	repo := &productRepository{}
 	err := repo.loadProducts(filename)
 	if err != nil {
