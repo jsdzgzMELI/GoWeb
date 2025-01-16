@@ -99,22 +99,24 @@ func (pr *productRepository) PatchProduct(id int, product domain.Product) error 
 	if err != nil {
 		return err
 	}
-
-	err = pr.ValueCheck(product)
-
-	if err != nil {
-		return err
+	if product.Name != "" {
+		pr.products[idx].Name = product.Name
 	}
-
-	err = pr.isValidDateFormat(product.Expiration)
-
-	if err != nil {
-		return errors.New("Invalid date format")
+	if product.Quantity >= 0 {
+		pr.products[idx].Quantity = product.Quantity
 	}
-
-	product.ID = pr.products[idx].ID
-	pr.products[idx] = product
-
+	if product.Code_value != "" {
+		pr.products[idx].Code_value = product.Code_value
+	}
+	if product.Is_published {
+		pr.products[idx].Is_published = product.Is_published
+	}
+	if product.Expiration != "" {
+		pr.products[idx].Expiration = product.Expiration
+	}
+	if product.Price >= 0 {
+		pr.products[idx].Price = product.Price
+	}
 	return nil
 }
 
